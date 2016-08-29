@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.classy {
+  color: lime;
+}
+.notty {
+  color: red;
+}
+</style>
+
+<script type="text/javascript" src="../src/treetests.js"></script>
+<script type="text/javascript">
+window.addEventListener('load', function () {
+var temp_ele = document.getElementById('tt-category-view');
+var out_ele = document.getElementById('wowee');
+
+var template = treetests.templater.templatize(temp_ele);
+
+var test_tdata = {
+  name: 'hoooeee wowzers',
+  cat_passed: false,
+  cat_count: 22,
+  children: []
+};
+var test_view = function (test_data, template) {
+  this.cont_class = test_data.cat_passed && 'classy' || 'notty';
+  this.children_cont_class = 'lil-classy';
+};
+
+treetests.dom_builder.build_dom(out_ele, template, test_tdata, new test_view(test_tdata, template));
+});
+</script>
+</head>
+<body>
+<div id="tt-templates" style="display: none;">
+  <div id="tt-category-view" data-tt-class="view.cont_class">
+    <div class="my_cat_title" data-tt-text="test_data.name"></div>
+    <div class="my_cat_result">
+      <span data-tt-text="test_data.cat_passed"></span> / <span data-tt-text="test_data.cat_count"></span>
+      <div class="my_cat_children" data-tt-repeat="child in test_data.children" data-tt-class="view.children_cont_class">
+        <tt-category data-tt-skip="child.type === 'category'"></tt-category>
+        <tt-test data-tt-skip="child.type === 'test'"></tt-category>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="wowee">
+</div>
+</body>
+</html>
