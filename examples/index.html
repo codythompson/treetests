@@ -20,12 +20,12 @@ var template = treetests.templater.templatize(temp_ele);
 
 var test_tdata = {
   name: 'hoooeee wowzers',
-  cat_passed: false,
+  cat_passed: 22,
   cat_count: 22,
   children: []
 };
 var test_view = function (test_data, template) {
-  this.cont_class = test_data.cat_passed && 'classy' || 'notty';
+  this.cont_class = (test_data.cat_passed === test_data.cat_count && 'classy') || 'notty';
   this.children_cont_class = 'lil-classy';
 };
 
