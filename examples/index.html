@@ -11,12 +11,13 @@
 </style>
 
 <script type="text/javascript" src="../src/treetests.js"></script>
+<script type="text/javascript" src="../src/templater.js"></script>
 <script type="text/javascript">
 window.addEventListener('load', function () {
 var temp_ele = document.getElementById('tt-category-view');
 var out_ele = document.getElementById('wowee');
 
-var template = treetests.templater.templatize(temp_ele);
+var template = treetests.templatize(temp_ele);
 
 var test_tdata = {
   name: 'hoooeee wowzers',
