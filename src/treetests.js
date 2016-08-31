@@ -23,7 +23,7 @@
 
 var treetests = {
   version: '0.0.0',
-  tt_prefix: 'data-tt-',
+  tt_att_prefix: 'data-tt-',
 };
 
 /*******************************************************************************
@@ -43,7 +43,7 @@ var templater = {
     };
     for (var i = 0; i < ele.attributes.length; i++) {
       var att = ele.attributes[i];
-      if (att.name.substr(0, treetests.tt_prefix.length) === treetests.tt_prefix) {
+      if (att.name.substr(0, treetests.tt_att_prefix.length) === treetests.tt_att_prefix) {
         atts.tt_atts[att.name] = att.value;
       } else if (!this.remove_ids || att.name !== 'id') {
         atts.atts[att.name] = att.value;
@@ -53,7 +53,7 @@ var templater = {
   },
 
   is_tt_tag: function (ele) {
-    return ele.tagName.toLowerCase().substr(0, treetests.tt_prefix.length) === treetests.tt_prefix;
+    return ele.tagName.toLowerCase().substr(0, treetests.tt_att_prefix.length) === treetests.tt_att_prefix;
   },
 
   templatize: function (ele) {
