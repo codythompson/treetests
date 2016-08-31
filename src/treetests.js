@@ -195,11 +195,11 @@ var dom_builder = {
   },
 
   node_handlers: {
-    text: function (template) {
+    'text': function (template) {
       return document.createTextNode(template.value);
     },
 
-    ele: function (template, test_data, view) {
+    'ele': function (template, test_data, view) {
       for (var att_name in template.tt_atts) {
         var handler = dom_builder.att_handlers[att_name];
         if (handler) {
