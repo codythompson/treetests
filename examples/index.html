@@ -12,6 +12,7 @@
 
 <script type="text/javascript" src="../src/treetests.js"></script>
 <script type="text/javascript" src="../src/templater.js"></script>
+<script type="text/javascript" src="../src/dom_builder.js"></script>
 <script type="text/javascript">
 window.addEventListener('load', function () {
 var temp_ele = document.getElementById('tt-category-view');
@@ -30,7 +31,7 @@ var test_view = function (test_data, template) {
   this.children_cont_class = 'lil-classy';
 };
 
-treetests.dom_builder.build_dom(out_ele, template, test_tdata, new test_view(test_tdata, template));
+treetests.build_dom(out_ele, template, test_tdata, new test_view(test_tdata, template));
 });
 </script>
 </head>
