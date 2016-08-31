@@ -28,11 +28,7 @@ var templater = {
   },
 
   templatize: function (ele) {
-    var dom_path = arguments[1] || [];
-
-    var template = {
-      dom_path: dom_path
-    };
+    var template = {};
     if (ele.nodeType === 3) { // text node
       template.type = 'text';
       template.value = ele.data;
@@ -43,13 +39,13 @@ var templater = {
       template.tt_atts = atts.tt_atts;
       template.atts = atts.atts;
     } else {
-      console.warn('[treetests] Unable to templatize node of type ' + ele.nodeType + '\nDOM PATH: ' + JSON.stringify(dom_path));
+      console.warn('[treetests] Unable to templatize node ' + ele);
       return null;
     }
 
     template.children = [];
     for (var i = 0; ele.childNodes && i < ele.childNodes.length; i++) {
-      var child = this.templatize(ele.childNodes[i], dom_path.concat([i]));
+      var child = this.templatize(ele.childNodes[i]);
       if (child) {
         template.children.push(child);
       }

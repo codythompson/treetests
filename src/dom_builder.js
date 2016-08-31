@@ -52,7 +52,6 @@ var dom_builder = {
       return {
         children: [
           {
-            dom_path: template_ele.dom_path.concat([template_ele.children.length]),
             type: 'text',
             value: script_val
           }
