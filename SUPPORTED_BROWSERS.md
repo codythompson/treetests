@@ -1,6 +1,10 @@
 # Supported Browsers
 
-This library, for the time being, is using Array.isArray without a polyfill. Accoring to [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), these are the earliset browsers that support Array.isArray:
+This library, for the time being, is uses the following js features without a polyfill:
+Array.isArray
+~~Array.prototype.forEach~~
+
+Accoring to [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), these are the earliset browsers that support the features listed above:
 
 * Desktop
   * Chrome 5
