@@ -51,10 +51,10 @@ var dom_builder = {
 
       return {
         children: [
-          {
+          new treetests.Template({
             type: 'text',
             value: script_val
-          }
+          })
         ]
       };
     },
@@ -142,6 +142,7 @@ var dom_builder = {
   },
 
   build_dom: function (parent_ele, template, test_data, view) {
+    template = template.clone();
     var ele = dom_builder.node_handlers[template.type](template, test_data, view);
     if (ele) {
       parent_ele.appendChild(ele);

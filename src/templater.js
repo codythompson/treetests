@@ -3,6 +3,54 @@
 /*******************************************************************************
  * templater
 *******************************************************************************/
+var Template = function (template_obj) {
+  for (var key in template_obj) {
+    this[key] = template_obj[key];
+  }
+};
+Template.prototype = {
+  clone_field_into: function (new_obj, field_name) {
+    switch (typeof this[field_name]) {
+      case 'object':
+        if (Array.isArray(this[field_name])) {
+          new_obj[field_name] = [];
+          for (var i = 0; i < this[field_name].length; i++) {
+            var val = this[field_name][i];
+            if (val instanceof Template) {
+              val = val.clone();
+            }
+            new_obj[field_name].push(val);
+          }
+          return;
+        } else {
+          new_obj[field_name] = {};
+          for (var key in this[field_name]) {
+            new_obj[field_name][key] = this[field_name][key];
+          }
+          return;
+        }
+      case 'string':
+      case 'number':
+        new_obj[field_name] = this[field_name];
+        return;
+    }
+  },
+
+  to_obj: function () {
+    var new_obj = {};
+    this.clone_field_into(new_obj, 'type');
+    this.clone_field_into(new_obj, 'value');
+    this.clone_field_into(new_obj, 'tag');
+    this.clone_field_into(new_obj, 'tt_atts');
+    this.clone_field_into(new_obj, 'atts');
+    this.clone_field_into(new_obj, 'children');
+    return new_obj;
+  },
+
+  clone: function () {
+    return new Template(this.to_obj());
+  }
+};
 
 var templater = {
   remove_ids: true,
@@ -51,10 +99,13 @@ var templater = {
       }
     }
 
+    template = new Template(template);
+
     return template;
   }
 };
 
+scope.treetests.Template = Template;
 scope.treetests.templatize = function (ele) {return templater.templatize(ele)};
 
 })(this);
