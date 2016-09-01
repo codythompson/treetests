@@ -19,7 +19,7 @@
 
 var treetests = {
   version: '0.0.0',
-  tt_att_prefix: 'data-tt-',
+  tt_att_prefix: 'data-tt-'
 };
 
 scope.treetests = treetests;
