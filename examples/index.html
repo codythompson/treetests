@@ -16,12 +16,12 @@
 <script type="text/javascript" src="../src/dom_builder.js"></script>
 <script type="text/javascript">
 window.addEventListener('load', function () {
-temp_ele = document.getElementById('tt-category-view');
+temp_ele = document.getElementById('tt-category-controller');
 out_ele = document.getElementById('wowee');
 
 app = treetests.app();
 
-app.add_template('cat-template', 'tt-category-view');
+app.add_template('cat-template', 'tt-category-controller');
 
 test_tdata = {
   name: 'hoooeee wowzers',
@@ -29,7 +29,7 @@ test_tdata = {
   cat_count: 22,
   children: []
 };
-app.add_view('cat-view', function (test_data, template) {
+app.add_controller('cat-cont', function (test_data, template) {
   this.cont_class = (test_data.cat_passed === test_data.cat_count && 'classy') || 'notty';
   this.children_cont_class = 'lil-classy';
 });
@@ -40,11 +40,11 @@ app.inject('cat-template', test_tdata, out_ele);
 </head>
 <body>
 <div id="tt-templates" style="display: none;">
-  <div id="tt-category-view" data-tt-view="cat-view" data-tt-class="view.cont_class">
+  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-class="controller.cont_class">
     <div class="my_cat_title" data-tt-text="test_data.name"></div>
     <div class="my_cat_result">
       <span data-tt-text="test_data.cat_passed"></span> / <span data-tt-text="test_data.cat_count"></span>
-      <div class="my_cat_children" data-tt-repeat="child in test_data.children" data-tt-class="view.children_cont_class">
+      <div class="my_cat_children" data-tt-repeat="child in test_data.children" data-tt-class="controller.children_cont_class">
         <tt-category data-tt-skip="child.type === 'category'"></tt-category>
         <tt-test data-tt-skip="child.type === 'test'"></tt-category>
       </div>

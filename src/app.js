@@ -1,12 +1,12 @@
 (function (scope) {
 
 var App = function () {
-  this.views = {};
+  this.controllers = {};
   this.templates = {};
 };
 App.prototype = {
-  add_view: function (view_name, view_constructor) {
-    this.views[view_name] = view_constructor;
+  add_controller: function (controller_name, controller_constructor) {
+    this.controllers[controller_name] = controller_constructor;
   },
 
   add_template: function (template_name, ele_or_id) {
@@ -21,19 +21,19 @@ App.prototype = {
     this.templates[template_name] = template;
   },
 
-  get_view: function (view_name) {
-    if (!this.views[view_name]) {
-      throw '[treetests] view "' + view_name + '" not found.';
+  get_controller: function (controller_name) {
+    if (!this.controllers[controller_name]) {
+      throw '[treetests] controller "' + controller_name + '" not found.';
     }
 
-    return this.views[view_name];
+    return this.controllers[controller_name];
   },
 
-  get_view_from_template: function (template) {
-    if (!template.view) {
-      throw '[treetests] template not root, no view name found';
+  get_controller_from_template: function (template) {
+    if (!template.controller) {
+      throw '[treetests] template not root, no controller name found';
     }
-    return this.get_view(template.view);
+    return this.get_controller(template.controller);
   },
 
   get_template: function (template_name) {
@@ -46,9 +46,9 @@ App.prototype = {
 
   inject: function (template_name, test_data, parent_ele) {
     var template = this.get_template(template_name);
-    var view = this.get_view_from_template(template);
-    view = new view(test_data, template);
-    treetests.build_dom(parent_ele || document.body, template, test_data, view);
+    var controller = this.get_controller_from_template(template);
+    controller = new controller(test_data, template);
+    treetests.build_dom(parent_ele || document.body, template, test_data, controller);
   }
 };
 scope.treetests.app = function () {

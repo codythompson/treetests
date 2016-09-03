@@ -8,9 +8,9 @@ var dom_builder = {
 
   /*
    * this should be passed 3 arguments!
-   * test_data, view, AND a string script to eval
+   * test_data, controller, AND a string script to eval
    */
-  att_script_eval: function (test_data, view) {
+  att_script_eval: function (test_data, controller) {
     try {
       return eval(arguments[2]);
     } catch (e) {
@@ -20,14 +20,14 @@ var dom_builder = {
   },
 
   att_handlers: {
-    'data-tt-class': function (att_val, template_ele, test_data, view) {
+    'data-tt-class': function (att_val, template_ele, test_data, controller) {
       var class_val = template_ele.atts['class'];
       if (class_val && class_val.length > 0) {
         class_val += ' ';
       } else {
         class_val = '';
       }
-      var script_val = dom_builder.att_script_eval(test_data, view, att_val);
+      var script_val = dom_builder.att_script_eval(test_data, controller, att_val);
       if (typeof script_val !== 'string') {
         // TODO something better than this
         throw '[treetests] invalid tt-class value: "' + arguments[2] + '", must evaluate to string';
@@ -42,8 +42,8 @@ var dom_builder = {
       };
     },
 
-    'data-tt-text': function (att_val, template_ele, test_data, view) {
-      var script_val = dom_builder.att_script_eval(test_data, view, att_val) + '';
+    'data-tt-text': function (att_val, template_ele, test_data, controller) {
+      var script_val = dom_builder.att_script_eval(test_data, controller, att_val) + '';
       if (typeof script_val !== 'string') {
         // TODO something better than this
         throw '[treetests] invalid tt-text value: "' + arguments[2] + '", must evaluate to string';
@@ -59,8 +59,8 @@ var dom_builder = {
       };
     },
 
-    'data-tt-skip': function (att_val, template_ele, test_data, view) {
-      var script_val = dom_builder.att_script_eval(test_data, view, att_val);
+    'data-tt-skip': function (att_val, template_ele, test_data, controller) {
+      var script_val = dom_builder.att_script_eval(test_data, controller, att_val);
       if (script_val) {
         return null;
       } else  {
@@ -68,7 +68,7 @@ var dom_builder = {
       }
     },
 
-    'data-tt-repeat': function (att_val, test_data, view) {
+    'data-tt-repeat': function (att_val, test_data, controller) {
       var att_tokens = att_val.split(' in ');
       // TODO move validation to where the template gets read
       if (att_tokens.length !== 2) {
@@ -110,11 +110,11 @@ var dom_builder = {
       return document.createTextNode(template.value);
     },
 
-    'ele': function (template, test_data, view) {
+    'ele': function (template, test_data, controller) {
       for (var att_name in template.tt_atts) {
         var handler = dom_builder.att_handlers[att_name];
         if (handler) {
-          var new_vals = handler(template.tt_atts[att_name], template, test_data, view);
+          var new_vals = handler(template.tt_atts[att_name], template, test_data, controller);
           if (!new_vals) { // an att handler has told us to skip this ele
             return null;
           }
@@ -129,7 +129,7 @@ var dom_builder = {
       }
       for (var i = 0; i < template.children.length; i++) {
         var child_template = template.children[i];
-        dom_builder.build_dom(ele, child_template, test_data, view);
+        dom_builder.build_dom(ele, child_template, test_data, controller);
       }
 
       return ele;
@@ -141,17 +141,17 @@ var dom_builder = {
     },
   },
 
-  build_dom: function (parent_ele, template, test_data, view) {
+  build_dom: function (parent_ele, template, test_data, controller) {
     template = template.clone();
-    var ele = dom_builder.node_handlers[template.type](template, test_data, view);
+    var ele = dom_builder.node_handlers[template.type](template, test_data, controller);
     if (ele) {
       parent_ele.appendChild(ele);
     }
   }
 };
 
-scope.treetests.build_dom = function (parent_ele, template, test_data, view) {
-  dom_builder.build_dom(parent_ele, template, test_data, view);
+scope.treetests.build_dom = function (parent_ele, template, test_data, controller) {
+  dom_builder.build_dom(parent_ele, template, test_data, controller);
 };
 
 })(this);
