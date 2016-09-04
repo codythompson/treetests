@@ -11,9 +11,10 @@
 </style>
 
 <script type="text/javascript" src="../src/treetests.js"></script>
-<script type="text/javascript" src="../src/templater.js"></script>
 <script type="text/javascript" src="../src/app.js"></script>
-<script type="text/javascript" src="../src/dom_builder.js"></script>
+<script type="text/javascript" src="../src/templater.js"></script>
+<script type="text/javascript" src="../src/dom_ele.js"></script>
+<script type="text/javascript" src="../src/view.js"></script>
 <script type="text/javascript">
 window.addEventListener('load', function () {
 temp_ele = document.getElementById('tt-category-controller');
@@ -45,8 +46,8 @@ app.inject('cat-template', test_tdata, out_ele);
     <div class="my_cat_result">
       <span data-tt-text="test_data.cat_passed"></span> / <span data-tt-text="test_data.cat_count"></span>
       <div class="my_cat_children" data-tt-repeat="child in test_data.children" data-tt-class="controller.children_cont_class">
-        <tt-category data-tt-skip="child.type === 'category'"></tt-category>
-        <tt-test data-tt-skip="child.type === 'test'"></tt-category>
+        <tt-category data-tt-skip="test_data.type === 'category'"></tt-category>
+        <tt-test data-tt-skip="test_data.type === 'test'"></tt-category>
       </div>
     </div>
   </div>

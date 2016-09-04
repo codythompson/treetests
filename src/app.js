@@ -46,9 +46,13 @@ App.prototype = {
 
   inject: function (template_name, test_data, parent_ele) {
     var template = this.get_template(template_name);
-    var controller = this.get_controller_from_template(template);
-    controller = new controller(test_data, template);
-    treetests.build_dom(parent_ele || document.body, template, test_data, controller);
+    var viewscope = new treetests.ViewScope(this, template, test_data);
+    console.log(viewscope.ele_tree);
+    var ele = viewscope.ele_tree.build();
+    (parent_ele || document.body).appendChild(ele);
+    // var controller = this.get_controller_from_template(template);
+    // controller = new controller(test_data, template);
+    // treetests.build_dom(parent_ele || document.body, template, test_data, controller);
   }
 };
 scope.treetests.app = function () {
