@@ -38,7 +38,7 @@ DomEle.prototype = {
 
   add_class: function (new_class) {
     if (this.atts['class']) {
-      this.atts['class'] += new_class;
+      this.atts['class'] += ' ' + new_class;
     } else {
       this.atts['class'] = new_class;
     }

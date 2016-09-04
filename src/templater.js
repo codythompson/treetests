@@ -79,7 +79,7 @@ var templater = {
   },
 
   is_tt_tag: function (ele) {
-    return ele.tagName.toLowerCase().substr(0, treetests.tt_att_prefix.length) === treetests.tt_att_prefix;
+    return ele.tagName.toLowerCase().substr(0, treetests.tt_tag_prefix.length) === treetests.tt_tag_prefix;
   },
 
   templatize: function (ele) {

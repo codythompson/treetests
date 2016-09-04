@@ -18,11 +18,13 @@
 <script type="text/javascript">
 window.addEventListener('load', function () {
 temp_ele = document.getElementById('tt-category-controller');
+temp_ele_cat_child = document.getElementById('tt-category-child');
 out_ele = document.getElementById('wowee');
 
 app = treetests.app();
 
 app.add_template('cat-template', 'tt-category-controller');
+app.add_template('tt-cat-child', 'tt-category-child');
 
 test_tdata = {
   name: 'hoooeee wowzers',
@@ -45,10 +47,15 @@ app.inject('cat-template', test_tdata, out_ele);
     <div class="my_cat_title" data-tt-text="test_data.name"></div>
     <div class="my_cat_result">
       <span data-tt-text="test_data.cat_passed"></span> / <span data-tt-text="test_data.cat_count"></span>
-      <div class="my_cat_children" data-tt-repeat="child in test_data.children" data-tt-class="controller.children_cont_class">
-        <tt-category data-tt-skip="test_data.type === 'category'"></tt-category>
+      <div class="my_cat_children" data-tt-class="controller.children_cont_class">
+        <tt-cat-child data-tt-skip="test_data.type === 'category'"></tt-category>
         <tt-test data-tt-skip="test_data.type === 'test'"></tt-category>
       </div>
+    </div>
+  </div>
+
+  <div id="tt-category-child" data-tt-controller="cat-cont">
+    <div data-tt-text="test_data.name + ' child'">
     </div>
   </div>
 </div>
