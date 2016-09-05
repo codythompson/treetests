@@ -30,32 +30,49 @@ test_tdata = {
   name: 'hoooeee wowzers',
   cat_passed: 22,
   cat_count: 22,
-  children: []
+  children: [
+  {
+    type: 'category',
+    name: 'yeppers',
+    cat_passed: 20,
+    cat_count: 20,
+  },
+  ]
 };
-app.add_controller('cat-cont', function (test_data, template) {
-  this.cont_class = (test_data.cat_passed === test_data.cat_count && 'classy') || 'notty';
-  this.children_cont_class = 'lil-classy';
+app.add_controller('cat-cont', function () {
+  this.set_model = function(model) {
+    var test_data = model;
+    this.cont_class = (test_data.cat_passed === test_data.cat_count && 'classy') || 'notty';
+    this.children_cont_class = 'lil-classy';
+  }
+});
+app.add_controller('fu-controller', function () {
+  this.set_model = function(model) {
+    var test_data = model;
+    this.cont_class = (test_data.cat_passed < test_data.cat_count && 'classy') || 'notty';
+    this.children_cont_class = 'lil-classy';
+  }
 });
 
-app.inject('cat-template', test_tdata, out_ele);
+app.inject('cat-template', out_ele);
 });
 </script>
 </head>
 <body>
 <div id="tt-templates" style="display: none;">
-  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-class="controller.cont_class">
-    <div class="my_cat_title" data-tt-text="test_data.name"></div>
+  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-model="test_tdata" data-tt-class="controller.cont_class">
+    <div class="my_cat_title" data-tt-text="model.name"></div>
     <div class="my_cat_result">
-      <span data-tt-text="test_data.cat_passed"></span> / <span data-tt-text="test_data.cat_count"></span>
+      <span data-tt-text="model.cat_passed"></span> / <span data-tt-text="model.cat_count"></span>
       <div class="my_cat_children" data-tt-class="controller.children_cont_class">
-        <tt-cat-child data-tt-skip="test_data.type === 'category'"></tt-category>
-        <tt-test data-tt-skip="test_data.type === 'test'"></tt-category>
+        <tt-cat-child data-tt-model="model.children[0]" data-tt-skip="model.type === 'category'"></tt-cat-child>
+        <tt-cat-child class="mmk" data-tt-model="model.children[0]" data-tt-skip="model.type !== 'category'"></tt-category>
       </div>
     </div>
   </div>
 
-  <div id="tt-category-child" data-tt-controller="cat-cont">
-    <div data-tt-text="test_data.name + ' child'">
+  <div id="tt-category-child" data-tt-class="controller.cont_class" data-tt-controller="fu-controller">
+    <div data-tt-text="model.name + ' child'">
     </div>
   </div>
 </div>

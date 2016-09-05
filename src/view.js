@@ -1,12 +1,12 @@
 (function (scope) {
 
-var ViewScope = function (app, template, test_data) {
+var ViewScope = function (app, template, controller, model) {
   this.app = app;
   this.template = template;
-  this.test_data = test_data;
 
-  this.controller_class = app.get_controller(template.controller);
-  this.controller = new this.controller_class(this.test_data, this.template);
+  this.controller = controller || null;
+  this.model = model || null;
+
   this.ele_tree = this.build_ele_tree(this.template);
 };
 ViewScope.prototype = {
@@ -16,7 +16,7 @@ ViewScope.prototype = {
    *
    * optionally, you can pass a 4th argument that is the expected resulting type
    */
-  att_script_eval: function (test_data, controller) {
+  att_script_eval: function (model, controller) {
     var att_val;
     try {
       att_val = eval(arguments[2]);
@@ -34,21 +34,21 @@ ViewScope.prototype = {
 
   tt_att_handlers: {
     // TODO \/
-    'data-tt-class': function (ele, att_val, template, test_data, controller) {
+    'data-tt-class': function (ele, att_val, test_data, controller) {
       att_val = this.att_script_eval(test_data, controller, att_val, 'string');
       ele.add_class(att_val);
     },
-    'data-tt-text': function (ele, att_val, template, test_data, controller) {
+    'data-tt-text': function (ele, att_val, test_data, controller) {
       att_val = this.att_script_eval(test_data, controller, att_val) + '';
       ele.children.push(att_val);
     },
-    'data-tt-skip': function (ele, att_val, template, test_data, controller) {
+    'data-tt-skip': function (ele, att_val, test_data, controller) {
       att_val = this.att_script_eval(test_data, controller, att_val);
       if (att_val) {
         ele.skip = true;
       }
     },
-    'data-tt-repeat': function (ele, att_val, template, test_data, controller) {
+    'data-tt-repeat': function (ele, att_val, test_data, controller) {
       ele.skip = true;
       // att_val = this.att_script_eval(test_data, controller, att_val, 'object');
       // if (Array.isArray(att_val) {
@@ -57,19 +57,33 @@ ViewScope.prototype = {
       //   }
       // }
     },
-    // 'data-tt-controller': function (ele, att_val, temlate, test_data, controller) {
-    //   // TODO
-    //   ele.skip = true;
-    // },
+  },
+
+  set_controller(template) {
+    if (template.controller) {
+      this.controller = new (this.app.get_controller(template.controller))();
+    }
+  },
+
+  set_model(template) {
+    if (template.model) {
+      this.model = this.att_script_eval(this.model, this.controller, template.model);
+    }
+    if (this.controller && this.controller.set_model) {
+      this.controller.set_model(this.model);
+    }
   },
 
   build_ele: function (template) {
+    this.set_controller(template);
+    this.set_model(template);
+
     var ele = new treetests.DomEle(template);
     for (var tt_att in template.tt_atts) {
       var handler = this.tt_att_handlers[tt_att];
       var att_val = template.tt_atts[tt_att];
       if (handler) {
-        handler.call(this, ele, att_val, template, this.test_data, this.controller);
+        handler.call(this, ele, att_val, this.model, this.controller);
       }
     }
 
@@ -83,11 +97,12 @@ ViewScope.prototype = {
 
   build_tt_ele: function (template) {
     var new_template = app.get_template(template.tag).clone();
+    new_template.transfer_state(template);
     if (template.controller) {
       new_template.controller = template.controller;
     }
     // TODO template.model tt-data-model
-    var view = new ViewScope(app, new_template, this.test_data);
+    var view = new ViewScope(app, new_template, this.controller, this.model);
     return view.ele_tree;
   },
 

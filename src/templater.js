@@ -10,6 +10,21 @@ var Template = function (template_obj) {
   }
 };
 Template.prototype = {
+  transfer_state: function (template) {
+    if (template.controller) {
+      this.controller = template.controller;
+    }
+    if (template.model) {
+      this.model = template.model;
+    }
+    for (var att_name in template.atts) {
+      this.atts[att_name] = template.atts[att_name];
+    }
+    for (var att_name in template.tt_atts) {
+      this.tt_atts[att_name] = template.tt_atts[att_name];
+    }
+  },
+
   clone_field_into: function (new_obj, field_name) {
     switch (typeof this[field_name]) {
       case 'object':
@@ -43,6 +58,7 @@ Template.prototype = {
     this.clone_field_into(new_obj, 'value');
     this.clone_field_into(new_obj, 'tag');
     this.clone_field_into(new_obj, 'controller');
+    this.clone_field_into(new_obj, 'model');
     this.clone_field_into(new_obj, 'tt_atts');
     this.clone_field_into(new_obj, 'atts');
     this.clone_field_into(new_obj, 'children');
@@ -68,6 +84,9 @@ var templater = {
         // the data-tt-controller att is a special case
         if (att.name == treetests.tt_att_prefix + 'controller') {
           atts.controller = att.value;
+        // the data-tt-model att is a special case
+        } else if (att.name == treetests.tt_att_prefix + 'model') {
+          atts.model = att.value;
         } else {
           atts.tt_atts[att.name] = att.value;
         }
@@ -93,6 +112,9 @@ var templater = {
       var atts = this.get_atts(ele);
       if (atts.controller) {
         template.controller = atts.controller;
+      }
+      if (atts.model) {
+        template.model = atts.model;
       }
       template.tt_atts = atts.tt_atts;
       template.atts = atts.atts;
