@@ -2,6 +2,9 @@
 
 /*******************************************************************************
  * templater
+ *
+ * TODO refactor all the templater logic into the Template class
+ * and get rid of the stupid instantiation via object
 *******************************************************************************/
 var Template = function (template_obj) {
   this.app = null;
@@ -101,13 +104,31 @@ var templater = {
     return ele.tagName.toLowerCase().substr(0, treetests.tt_tag_prefix.length) === treetests.tt_tag_prefix;
   },
 
+  is_tt_repeater_tag: function (ele) {
+    return ele.tagName.toLowerCase() === treetests.tt_tag_prefix + 'repeater';
+  },
+
+  get_controller: function (atts) {
+    if (atts[treetests.tt_prefix + 'controller']) {
+      return atts[treetests.tt_prefix + 'controller'];
+    }
+    return null;
+  },
+
+  get_model: function (atts) {
+    if (atts[treetests.tt_prefix + 'model']) {
+      return atts[treetests.tt_prefix + 'model'];
+    }
+    return null;
+  },
+
   templatize: function (ele) {
     var template = {};
     if (ele.nodeType === 3) { // text node
       template.type = 'text';
       template.value = ele.data;
     } else if (ele.nodeType === 1) { // html element
-      template.type = (this.is_tt_tag(ele) && 'tt-ele') || 'ele';
+      template.type = (this.is_tt_repeater_tag(ele) && 'tt-repeater') || (this.is_tt_tag(ele) && 'tt-ele') || 'ele';
       template.tag = ele.tagName.toLowerCase();
       var atts = this.get_atts(ele);
       if (atts.controller) {

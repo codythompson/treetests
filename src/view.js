@@ -101,9 +101,49 @@ ViewScope.prototype = {
     if (template.controller) {
       new_template.controller = template.controller;
     }
-    // TODO template.model tt-data-model
+
     var view = new ViewScope(app, new_template, this.controller, this.model);
     return view.ele_tree;
+  },
+
+  build_tt_repeater: function (template) {
+    // build the containing html element
+    var parent_template = template.clone();
+    delete parent_template.controller;
+    delete parent_template.model;
+    parent_template.children = [];
+    parent_template.tag = 'div';
+    var parent_ele = this.build_ele(parent_template);
+
+    if (!template.model) {
+      var ele = new treetests.DomEle(template);
+      ele.skip = true;
+      return ele;
+    }
+    var models = this.att_script_eval(this.model, this.controller, template.model, 'object');
+    var controller_class = (template.controller && this.app.get_controller(template.controller)) || null;
+
+    // if we have an array of models, iterate
+    for (var i = 0; Array.isArray(models) && i < models.length; i++) {
+      var model = models[i];
+      var controller = this.controller;
+      if (controller_class) {
+        controller = new controller_class();
+        controller.set_model(model);
+      }
+      if (controller.set_repeat_number) {
+        controller.set_repeat_number(i);
+      }
+      for (var j = 0; j < template.children.length; j++) {
+        var child_template = template.children[j].clone();
+        var view = new ViewScope(this.app, child_template, controller, model);
+        parent_ele.children.push(view.ele_tree);
+      }
+    }
+
+    // TODO handle an object filled with models in addition to arrays
+
+    return parent_ele;
   },
 
   build_ele_tree: function (template) {
@@ -112,6 +152,8 @@ ViewScope.prototype = {
         return template.value;
       case 'ele':
         return this.build_ele(template);
+      case 'tt-repeater':
+        return this.build_tt_repeater(template);
       case 'tt-ele':
         return this.build_tt_ele(template);
     }

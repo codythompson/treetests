@@ -37,6 +37,11 @@ test_tdata = {
     cat_passed: 20,
     cat_count: 20,
   },
+  {
+    name: 'yeppers 2',
+    cat_passed: 10,
+    cat_count: 20,
+  },
   ]
 };
 app.add_controller('cat-cont', function () {
@@ -64,10 +69,10 @@ app.inject('cat-template', out_ele);
     <div class="my_cat_title" data-tt-text="model.name"></div>
     <div class="my_cat_result">
       <span data-tt-text="model.cat_passed"></span> / <span data-tt-text="model.cat_count"></span>
-      <div class="my_cat_children" data-tt-class="controller.children_cont_class">
-        <tt-cat-child data-tt-model="model.children[0]" data-tt-skip="model.type === 'category'"></tt-cat-child>
-        <tt-cat-child class="mmk" data-tt-model="model.children[0]" data-tt-skip="model.type !== 'category'"></tt-category>
-      </div>
+      <tt-repeater data-tt-model="model.children" class="my_cat_children" data-tt-class="controller.children_cont_class">
+        <tt-cat-child data-tt-skip="model.type === 'category'"></tt-cat-child>
+        <tt-cat-child class="mmk" data-tt-skip="model.type !== 'category'"></tt-cat-child>
+      </tt-repeater>
     </div>
   </div>
 
