@@ -1,5 +1,44 @@
 (function (scope) {
 
+/*
+ * this should be passed 3 arguments!
+ * test_data, controller, AND a string script to eval
+ *
+ * optionally, you can pass a 4th argument that is the expected resulting type
+ */
+var att_script_eval = function (model, controller) {
+  var att_val;
+  try {
+    att_val = eval(arguments[2]);
+  } catch (e) {
+    // TODO something better than this
+    throw '[treetests] invalid tt-att value: "' + arguments[2] + '"';
+  }
+
+  if (arguments.length >= 4 && typeof att_val !== arguments[3]) {
+    throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
+  }
+  if (arguments.length >= 4) {
+    var exp_types = arguments[3];
+    if (!Array.isArray(arguments[3])) {
+      exp_types = [exp_types];
+    }
+    var found_type = false;
+    for (var i = 0; i < exp_types.length; i++) {
+      if (typeof att_val === exp_types[i]) {
+        found_type = true;
+        break;
+      }
+    }
+    if (!found_type) {
+      throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
+    }
+  }
+
+  return att_val;
+};
+
+
 var ViewScope = function (app, template, controller, model) {
   this.app = app;
   this.template = template;
@@ -10,56 +49,18 @@ var ViewScope = function (app, template, controller, model) {
   this.ele_tree = this.build_ele_tree(this.template);
 };
 ViewScope.prototype = {
-  /*
-   * this should be passed 3 arguments!
-   * test_data, controller, AND a string script to eval
-   *
-   * optionally, you can pass a 4th argument that is the expected resulting type
-   */
-  att_script_eval: function (model, controller) {
-    var att_val;
-    try {
-      att_val = eval(arguments[2]);
-    } catch (e) {
-      // TODO something better than this
-      throw '[treetests] invalid tt-att value: "' + arguments[2] + '"';
-    }
-
-    if (arguments.length >= 4 && typeof att_val !== arguments[3]) {
-      throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
-    }
-    if (arguments.length >= 4) {
-      var exp_types = arguments[3];
-      if (!Array.isArray(arguments[3])) {
-        exp_types = [exp_types];
-      }
-      var found_type = false;
-      for (var i = 0; i < exp_types.length; i++) {
-        if (typeof att_val === exp_types[i]) {
-          found_type = true;
-          break;
-        }
-      }
-      if (!found_type) {
-        throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
-      }
-    }
-
-    return att_val;
-  },
-
   tt_att_handlers: {
     // TODO \/
     'data-tt-class': function (ele, att_val, test_data, controller) {
-      att_val = this.att_script_eval(test_data, controller, att_val, 'string');
+      att_val = att_script_eval(test_data, controller, att_val, 'string');
       ele.add_class(att_val);
     },
     'data-tt-text': function (ele, att_val, test_data, controller) {
-      att_val = this.att_script_eval(test_data, controller, att_val) + '';
+      att_val = att_script_eval(test_data, controller, att_val) + '';
       ele.children.push(att_val);
     },
     'data-tt-skip': function (ele, att_val, test_data, controller) {
-      att_val = this.att_script_eval(test_data, controller, att_val);
+      att_val = att_script_eval(test_data, controller, att_val);
       if (att_val) {
         ele.skip = true;
       }
@@ -74,7 +75,7 @@ ViewScope.prototype = {
 
   set_model(template) {
     if (template.model) {
-      this.model = this.att_script_eval(this.model, this.controller, template.model);
+      this.model = att_script_eval(this.model, this.controller, template.model);
     }
     if (this.controller && this.controller.set_model) {
       this.controller.set_model(this.model);
@@ -124,7 +125,7 @@ ViewScope.prototype = {
       ele.skip = true;
       return ele;
     }
-    var models = this.att_script_eval(this.model, this.controller, template.model);
+    var models = att_script_eval(this.model, this.controller, template.model);
     var controller_class = (template.controller && this.app.get_controller(template.controller)) || null;
 
     // if we have an array of models, iterate
