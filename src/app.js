@@ -42,9 +42,6 @@ App.prototype = {
     var viewscope = new treetests.ViewScope(this, template);
     var ele = viewscope.ele_tree.build();
     (parent_ele || document.body).appendChild(ele);
-    // var controller = this.get_controller_from_template(template);
-    // controller = new controller(test_data, template);
-    // treetests.build_dom(parent_ele || document.body, template, test_data, controller);
   }
 };
 scope.treetests.app = function () {
