@@ -29,13 +29,6 @@ App.prototype = {
     return this.controllers[controller_name];
   },
 
-  get_controller_from_template: function (template) {
-    if (!template.controller) {
-      throw '[treetests] template not root, no controller name found';
-    }
-    return this.get_controller(template.controller);
-  },
-
   get_template: function (template_name) {
     if (!this.templates[template_name]) {
       throw '[treetests] template "' + template_name + '" not found.';
