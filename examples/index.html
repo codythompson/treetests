@@ -23,7 +23,7 @@ out_ele = document.getElementById('wowee');
 
 app = treetests.app();
 
-app.add_template('cat-template', 'tt-category-controller');
+app.add_template('tt-cat-template', 'tt-category-controller');
 app.add_template('tt-cat-child', 'tt-category-child');
 
 test_tdata = {
@@ -59,7 +59,7 @@ app.add_controller('fu-controller', function () {
   }
 });
 
-app.inject('cat-template', out_ele);
+app.inject('tt-cat-template', out_ele);
 });
 </script>
 </head>
@@ -69,8 +69,8 @@ app.inject('cat-template', out_ele);
     <div class="my_cat_title" data-tt-text="model.name"></div>
     <div class="my_cat_result">
       <span data-tt-text="model.cat_passed"></span> / <span data-tt-text="model.cat_count"></span>
-      <tt-repeater data-tt-model="model.children" class="my_cat_children" data-tt-class="controller.children_cont_class">
-        <tt-cat-child data-tt-skip="model.type === 'category'"></tt-cat-child>
+      <tt-repeater data-tt-skip="!model.children" data-tt-model="model.children" class="my_cat_children" data-tt-class="controller.children_cont_class">
+        <tt-cat-template data-tt-skip="model.type === 'category'"></tt-cat-child>
         <tt-cat-child class="mmk" data-tt-skip="model.type !== 'category'"></tt-cat-child>
       </tt-repeater>
     </div>
