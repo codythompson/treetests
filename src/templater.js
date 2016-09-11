@@ -1,11 +1,5 @@
 (function (scope) {
 
-/*******************************************************************************
- * templater
- *
- * TODO refactor all the templater logic into the Template class
- * and get rid of the stupid instantiation via object
-*******************************************************************************/
 var Template = function (template_obj) {
   this.app = null;
   for (var key in template_obj) {
