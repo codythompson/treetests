@@ -63,16 +63,7 @@ ViewScope.prototype = {
       if (att_val) {
         ele.skip = true;
       }
-    },
-    'data-tt-repeat': function (ele, att_val, test_data, controller) {
-      ele.skip = true;
-      // att_val = this.att_script_eval(test_data, controller, att_val, 'object');
-      // if (Array.isArray(att_val) {
-      //   for (var i = 0; i < att_val.length; i++) {
-      //     var child_model = att_val[i];
-      //   }
-      // }
-    },
+    }
   },
 
   set_controller(template) {
