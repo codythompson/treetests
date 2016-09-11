@@ -15,9 +15,6 @@ var att_script_eval = function (model, controller) {
     throw '[treetests] invalid tt-att value: "' + arguments[2] + '"';
   }
 
-  if (arguments.length >= 4 && typeof att_val !== arguments[3]) {
-    throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
-  }
   if (arguments.length >= 4) {
     var exp_types = arguments[3];
     if (!Array.isArray(arguments[3])) {
