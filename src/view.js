@@ -66,13 +66,13 @@ ViewScope.prototype = {
     }
   },
 
-  set_controller(template) {
+  set_controller: function (template) {
     if (template.controller) {
       this.controller = new (this.app.get_controller(template.controller))();
     }
   },
 
-  set_model(template) {
+  set_model: function (template) {
     if (template.model) {
       this.model = att_script_eval(this.model, this.controller, template.model);
     }
