@@ -34,13 +34,13 @@ test_tdata = {
   cat_count: 22,
   children: [
     {
-      type: 'category',
+      type: 'test',
       name: 'yeppers',
       cat_passed: 20,
       cat_count: 20,
     },
     {
-      type: 'test',
+      type: 'category',
       name: 'yeppers 2',
       cat_passed: 10,
       cat_count: 20,
@@ -77,14 +77,14 @@ app.add_controller('fu-controller', function () {
   }
 });
 
-// app.inject('tt-cat-template', out_ele);
-app.inject('simple-entry', out_ele);
+app.inject('tt-cat-template', out_ele);
+// app.inject('tt-simple-template', out_ele);
 });
 </script>
 </head>
 <body>
 <div id="tt-templates" style="display: none;">
-  <div id="tt-simple-template" data-tt-controller="cat-cont">
+  <div id="tt-simple-template" data-tt-controller="cat-cont" data-tt-model="test_tdata">
     <span data-tt-text="model.name"></span>
     <tt-repeater data-tt-skip="!model.children || model.children.length === 0" data-tt-model="model.children">
       <tt-simple-template data-tt-model="model"></tt-simple_template>
@@ -95,12 +95,12 @@ app.inject('simple-entry', out_ele);
     <tt-simple-template data-tt-controller="cat-cont" data-tt-model="test_tdata"></tt-simple-template>
   </div>
 
-  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-model="test_tdata" data-tt-class="controller.cont_class">
+  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-model="model || test_tdata" data-tt-class="controller.cont_class">
     <div class="my_cat_title" data-tt-text="model.name"></div>
     <div class="my_cat_result">
       <span data-tt-text="model.cat_passed"></span> / <span data-tt-text="model.cat_count"></span>
       <tt-repeater data-tt-skip="!model.children" data-tt-model="model.children" class="my_cat_children" data-tt-class="controller.children_cont_class">
-        <tt-cat-template data-tt-skip="model.type !== 'category'"></tt-cat-child>
+        <tt-cat-template data-tt-skip="model.type !== 'category'"></tt-cat-template>
         <tt-cat-child class="mmk" data-tt-skip="model.type !== 'test'"></tt-cat-child>
       </tt-repeater>
     </div>
