@@ -38,7 +38,6 @@ test_tdata = {
       name: 'yeppers',
       cat_passed: 20,
       cat_count: 20,
-      children: [],
     },
     {
       type: 'test',
@@ -58,7 +57,6 @@ test_tdata = {
           name: 'child child 2',
           cat_passed: 10,
           cat_count: 20,
-          children: [],
         },
       ],
     },
@@ -88,7 +86,7 @@ app.inject('simple-entry', out_ele);
 <div id="tt-templates" style="display: none;">
   <div id="tt-simple-template" data-tt-controller="cat-cont">
     <span data-tt-text="model.name"></span>
-    <tt-repeater data-tt-skip="!model.children" data-tt-model="model.children">
+    <tt-repeater data-tt-skip="!model.children || model.children.length === 0" data-tt-model="model.children">
       <tt-simple-template data-tt-model="model"></tt-simple_template>
     </tt-repeater>
   </div>

@@ -28,6 +28,22 @@ ViewScope.prototype = {
     if (arguments.length >= 4 && typeof att_val !== arguments[3]) {
       throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
     }
+    if (arguments.length >= 4) {
+      var exp_types = arguments[3];
+      if (!Array.isArray(arguments[3])) {
+        exp_types = [exp_types];
+      }
+      var found_type = false;
+      for (var i = 0; i < exp_types.length; i++) {
+        if (typeof att_val === exp_types[i]) {
+          found_type = true;
+          break;
+        }
+      }
+      if (!found_type) {
+        throw '[treetests] invalid tt-att value type: "' + typeof att_val + '", expected: "' + arguments[3] + ' "';
+      }
+    }
 
     return att_val;
   },
@@ -98,9 +114,6 @@ ViewScope.prototype = {
   build_tt_ele: function (template) {
     var new_template = app.get_template(template.tag).clone();
     new_template.transfer_state(template);
-    if (template.controller) {
-      new_template.controller = template.controller;
-    }
 
     var view = new ViewScope(app, new_template, this.controller, this.model);
     return view.ele_tree;
@@ -120,7 +133,7 @@ ViewScope.prototype = {
       ele.skip = true;
       return ele;
     }
-    var models = this.att_script_eval(this.model, this.controller, template.model, 'object');
+    var models = this.att_script_eval(this.model, this.controller, template.model);
     var controller_class = (template.controller && this.app.get_controller(template.controller)) || null;
 
     // if we have an array of models, iterate
