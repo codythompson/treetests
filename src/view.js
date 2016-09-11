@@ -39,6 +39,7 @@ var att_script_eval = function (model, controller) {
 };
 
 
+// TODO change order of controller and model params
 var ViewScope = function (app, template, controller, model) {
   this.app = app;
   this.template = template;

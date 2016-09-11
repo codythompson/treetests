@@ -37,9 +37,12 @@ App.prototype = {
     return this.templates[template_name];
   },
 
-  inject: function (template_name, parent_ele) {
+  inject: function (template_name, parent_ele, model, controller) {
+    if (typeof controller === 'function') {
+      controller = new controller();
+    }
     var template = this.get_template(template_name);
-    var viewscope = new treetests.ViewScope(this, template);
+    var viewscope = new treetests.ViewScope(this, template, controller, model);
     var ele = viewscope.ele_tree.build();
     (parent_ele || document.body).appendChild(ele);
   }

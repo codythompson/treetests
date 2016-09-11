@@ -58,5 +58,5 @@ app.add_controller('test', function () {
   };
 });
 
-app.inject('tt-results-wrapper');
+app.inject('tt-results-wrapper', null, test_results, app.get_controller('suite'));
 });
