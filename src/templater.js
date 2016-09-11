@@ -152,7 +152,7 @@ var templater = {
   }
 };
 
-scope.treetests.Template = Template;
+scope.treetests.app.Template = Template;
 scope.treetests.templatize = function (ele) {return templater.templatize(ele)};
 
 })(this);

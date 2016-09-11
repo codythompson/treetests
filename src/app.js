@@ -42,7 +42,7 @@ App.prototype = {
       controller = new controller();
     }
     var template = this.get_template(template_name);
-    var viewscope = new treetests.ViewScope(this, template, controller, model);
+    var viewscope = new treetests.app.ViewScope(this, template, controller, model);
     var ele = viewscope.ele_tree.build();
     (parent_ele || document.body).appendChild(ele);
   }

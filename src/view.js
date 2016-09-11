@@ -83,7 +83,7 @@ ViewScope.prototype = {
     this.set_controller(template);
     this.set_model(template);
 
-    var ele = new treetests.DomEle(template);
+    var ele = new treetests.app.DomEle(template);
     for (var tt_att in template.tt_atts) {
       var handler = this.tt_att_handlers[tt_att];
       var att_val = template.tt_atts[tt_att];
@@ -118,7 +118,7 @@ ViewScope.prototype = {
     var parent_ele = this.build_ele(parent_template);
 
     if (!template.model) {
-      var ele = new treetests.DomEle(template);
+      var ele = new treetests.app.DomEle(template);
       ele.skip = true;
       return ele;
     }
@@ -162,6 +162,6 @@ ViewScope.prototype = {
   },
 };
 
-scope.treetests.ViewScope = ViewScope;
+scope.treetests.app.ViewScope = ViewScope;
 
 })(this);

@@ -74,6 +74,6 @@ DomEle.prototype = {
   }
 };
 
-scope.treetests.DomEle = DomEle;
+scope.treetests.app.DomEle = DomEle;
 
 })(this);
