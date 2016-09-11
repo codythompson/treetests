@@ -50,17 +50,16 @@ var ViewScope = function (app, template, controller, model) {
 };
 ViewScope.prototype = {
   tt_att_handlers: {
-    // TODO \/
-    'data-tt-class': function (ele, att_val, test_data, controller) {
-      att_val = att_script_eval(test_data, controller, att_val, 'string');
+    'data-tt-class': function (ele, att_val, model, controller) {
+      att_val = att_script_eval(model, controller, att_val, 'string');
       ele.add_class(att_val);
     },
-    'data-tt-text': function (ele, att_val, test_data, controller) {
-      att_val = att_script_eval(test_data, controller, att_val) + '';
+    'data-tt-text': function (ele, att_val, model, controller) {
+      att_val = att_script_eval(model, controller, att_val) + '';
       ele.children.push(att_val);
     },
-    'data-tt-skip': function (ele, att_val, test_data, controller) {
-      att_val = att_script_eval(test_data, controller, att_val);
+    'data-tt-skip': function (ele, att_val, model, controller) {
+      att_val = att_script_eval(model, controller, att_val);
       if (att_val) {
         ele.skip = true;
       }
