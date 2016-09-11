@@ -4,8 +4,10 @@
  * type // string 'category'
  * cats_passed // number of child categories that passed all tests
  * cat_count // number of child categories
- * tests_passed // number of all descendant tests that passed
- * tests_count // number of all descendant tests
+ * tests_passed // number of tests passed stricly within this cat
+ * test_count // number of tests stricly within this cat
+ * total_tests_passed // number of all descendant tests that passed
+ * total_test_count // number of all descendant tests
  * children // child tests or categories
  *
  * test_data test fields:

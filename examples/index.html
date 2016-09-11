@@ -2,6 +2,16 @@
 <html>
 <head>
 <style>
+.suite {
+  border: 8px solid;
+}
+.cat {
+  border: 4px solid;
+}
+.test {
+  border: 1px solid;
+}
+
 .classy {
   color: lime;
 }
@@ -15,103 +25,35 @@
 <script type="text/javascript" src="../src/templater.js"></script>
 <script type="text/javascript" src="../src/dom_ele.js"></script>
 <script type="text/javascript" src="../src/view.js"></script>
-<script type="text/javascript">
-window.addEventListener('load', function () {
-temp_ele = document.getElementById('tt-category-controller');
-temp_ele_cat_child = document.getElementById('tt-category-child');
-out_ele = document.getElementById('wowee');
 
-app = treetests.app();
+<script type="text/javascript" src="../src/test_suite.js"></script>
 
-app.add_template('tt-cat-template', 'tt-category-controller');
-app.add_template('tt-cat-child', 'tt-category-child');
-app.add_template('tt-simple-template', 'tt-simple-template');
-app.add_template('simple-entry', 'simple-entry');
-
-test_tdata = {
-  name: 'hoooeee wowzers',
-  cat_passed: 22,
-  cat_count: 22,
-  children: [
-    {
-      type: 'test',
-      name: 'yeppers',
-      cat_passed: 20,
-      cat_count: 20,
-    },
-    {
-      type: 'category',
-      name: 'yeppers 2',
-      cat_passed: 10,
-      cat_count: 20,
-      children: [
-        {
-          type: 'category',
-          name: 'child child a',
-          cat_passed: 20,
-          cat_count: 20,
-          children: [],
-        },
-        {
-          type: 'test',
-          name: 'child child 2',
-          cat_passed: 10,
-          cat_count: 20,
-        },
-      ],
-    },
-  ]
-};
-app.add_controller('cat-cont', function () {
-  this.set_model = function(model) {
-    var test_data = model;
-    this.cont_class = (test_data.cat_passed === test_data.cat_count && 'classy') || 'notty';
-    this.children_cont_class = 'lil-classy';
-  }
-});
-app.add_controller('fu-controller', function () {
-  this.set_model = function(model) {
-    var test_data = model;
-    this.cont_class = (test_data.cat_passed < test_data.cat_count && 'classy') || 'notty';
-    this.children_cont_class = 'lil-classy';
-  }
-});
-
-app.inject('tt-cat-template', out_ele);
-// app.inject('tt-simple-template', out_ele);
-});
-</script>
+<script type="text/javascript" src="js/tests.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 </head>
 <body>
+  <!-- templates -->
 <div id="tt-templates" style="display: none;">
-  <div id="tt-simple-template" data-tt-controller="cat-cont" data-tt-model="test_tdata">
-    <span data-tt-text="model.name"></span>
-    <tt-repeater data-tt-skip="!model.children || model.children.length === 0" data-tt-model="model.children">
-      <tt-simple-template data-tt-model="model"></tt-simple_template>
+  <div id="test-child" class="child-outer">
+    <tt-test-template data-tt-skip="model.type !== 'suite'" data-tt-controller="suite"></tt-test-template>
+    <tt-test-template data-tt-skip="model.type !== 'cat'" data-tt-controller="cat"></tt-test-template>
+    <tt-test-template data-tt-skip="model.type !== 'test'" data-tt-controller="test"></tt-test-template>
+  </div>
+
+  <div id="test-template" data-tt-class="controller.cont_class">
+    <div class="title" >
+      <span data-tt-text="controller.title_text"></span>
+      <span data-tt-text="controller.desc_text"></span>
+    </div>
+    <tt-repeater class="children" data-tt-model="model.children" data-tt-skip="!model.children || model.children.length === 0">
+      <tt-test-child ></tt-test-child>
     </tt-repeater>
   </div>
 
-  <div id="simple-entry">
-    <tt-simple-template data-tt-controller="cat-cont" data-tt-model="test_tdata"></tt-simple-template>
-  </div>
-
-  <div id="tt-category-controller" data-tt-controller="cat-cont" data-tt-model="model || test_tdata" data-tt-class="controller.cont_class">
-    <div class="my_cat_title" data-tt-text="model.name"></div>
-    <div class="my_cat_result">
-      <span data-tt-text="model.cat_passed"></span> / <span data-tt-text="model.cat_count"></span>
-      <tt-repeater data-tt-skip="!model.children" data-tt-model="model.children" class="my_cat_children" data-tt-class="controller.children_cont_class">
-        <tt-cat-template data-tt-skip="model.type !== 'category'"></tt-cat-template>
-        <tt-cat-child class="mmk" data-tt-skip="model.type !== 'test'"></tt-cat-child>
-      </tt-repeater>
-    </div>
-  </div>
-
-  <div id="tt-category-child" data-tt-class="controller.cont_class" data-tt-controller="fu-controller">
-    <div data-tt-text="model.name + ' child'">
-    </div>
+  <div id="results-wrapper">
+    <tt-test-template data-tt-controller="suite" data-tt-model="test_results"></tt-test-template>
   </div>
 </div>
-<div id="wowee">
-</div>
+  <!-- end templates -->
 </body>
 </html>
