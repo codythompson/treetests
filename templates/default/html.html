@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+</html>
+<body>
+
+<div id="tt-test-template" data-tt-class="controller.cont_class">
+  <div class="tt-parent-container">
+    <div class="tt-title-class" data-tt-text="controller.title"></div>
+    <div data-tt-skip="controller.has_cat_stats" class="tt-cat-stats-class" data-tt-text="controller.cat_stats"></div>
+    <div class="tt-test-stats-class" data-tt-text="controller.test_stats"></div>
+    <div data-tt-skip="controller.message" class="tt-message-class" data-tt-text="controller.message"></div>
+  </div>
+  <tt-repeater data-tt-skip="!controller.has_children" data-tt-model="model.children" class="tt-children-container">
+    <tt-cat-template data-tt-skip="!controller.is_cat" data-tt-controller="tt-cat-controller"></tt-cat-template>
+    <tt-test-template data-tt-skip="!controller.is_test" data-tt-controller="tt-test-controller"></tt-test-template>
+    <tt-suite-template data-tt-skip="!controller.is_suite" data-tt-controller="tt-suite-controller"></tt-suite-template>
+  </tt-repeater>
+</div>
+</body>
+</html>
