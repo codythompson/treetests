@@ -71,6 +71,11 @@ Template.prototype = {
     return new_obj;
   },
 
+  to_json_string: function () {
+    var obj = this.to_obj(true);
+    return JSON.stringify(obj);
+  },
+
   clone: function () {
     return new Template(this.to_obj());
   }
