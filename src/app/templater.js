@@ -49,7 +49,9 @@ Template.prototype = {
     }
   },
 
-  to_obj: function () {
+  to_obj: function (recursive) {
+    recursive = recursive || false;
+
     var new_obj = {};
     this.clone_field_into(new_obj, 'type');
     this.clone_field_into(new_obj, 'value');
@@ -58,7 +60,14 @@ Template.prototype = {
     this.clone_field_into(new_obj, 'model');
     this.clone_field_into(new_obj, 'tt_atts');
     this.clone_field_into(new_obj, 'atts');
-    this.clone_field_into(new_obj, 'children');
+    if (recursive) {
+      new_obj.children = [];
+      for (var i = 0; i < this.children.length; i++) {
+        new_obj.children.push(this.children[i].to_obj(true));
+      }
+    } else {
+      this.clone_field_into(new_obj, 'children');
+    }
     return new_obj;
   },
 
